@@ -35,7 +35,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   Iterable<GameComponent> get _gesturesComponents => components
       .where((c) =>
           ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
-              ((c is TapGesture && (c as TapGesture).enableTab) ||
+              ((c is TapGesture && (c as TapGesture).enableTap) ||
                   (c is DragGesture && (c as DragGesture).enableDrag))))
       .cast<GameComponent>();
 

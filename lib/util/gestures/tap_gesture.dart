@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 
 mixin TapGesture {
-  bool enableTab = true;
+  bool enableTap = true;
   int _pointer;
   void onTap();
   void onTapDown(int pointer, Offset position) {
-    if (!(this is GameComponent) || !enableTab) return;
+    if (!(this is GameComponent) || !enableTap) return;
     if (_gameComponent.isHud()) {
       if (_gameComponent.position.contains(position)) {
         _pointer = pointer;
@@ -22,7 +22,7 @@ mixin TapGesture {
   }
 
   void onTapUp(int pointer, Offset position) {
-    if (!enableTab || pointer != _pointer) return;
+    if (!enableTap || pointer != _pointer) return;
     if (_gameComponent.isHud()) {
       if (_gameComponent.position.contains(position)) {
         onTap();
