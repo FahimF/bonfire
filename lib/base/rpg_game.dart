@@ -51,7 +51,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   RPGGame({
     @required this.context,
     @required this.map,
-    @required this.joystickController,
+    this.joystickController,
     this.player,
     this.interface,
     List<Enemy> enemies,
@@ -68,8 +68,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     double cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
     bool cameraMoveOnlyMapArea = false,
-  })  : assert(context != null),
-        assert(joystickController != null) {
+  }) : assert(context != null) {
     gameCamera = Camera(
       zoom: cameraZoom ?? 1.0,
       sizeMovementWindow: cameraSizeMovementWindow,
@@ -77,7 +76,9 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       target: player,
     );
     gameCamera.gameRef = this;
-    joystickController.addObserver(player ?? MapExplorer(gameCamera));
+    if (joystickController != null) {
+      joystickController.addObserver(player ?? MapExplorer(gameCamera));
+    }
     gameController?.gameRef = this;
     if (background != null) super.add(background);
     if (map != null) super.add(map);
@@ -89,7 +90,9 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       super.add(LightingComponent(color: lightingColorGame));
     }
     super.add((interface ?? GameInterface()));
-    super.add(joystickController);
+    if (joystickController != null) {
+      super.add(joystickController);
+    }
     _interval = IntervalTick(200, tick: _updateTempList);
   }
 
@@ -146,7 +149,9 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   @override
   void onKeyEvent(RawKeyEvent event) {
-    joystickController.onKeyboard(event);
+    if (joystickController != null) {
+      joystickController.onKeyboard(event);
+    }
   }
 
   @override

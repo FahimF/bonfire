@@ -23,6 +23,7 @@ class Menu extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
               'Bonfire',
@@ -31,36 +32,81 @@ class Menu extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            SizedBox(
-              width: 200,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text('Manual Map'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GameManualMap()),
-                  );
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text('Manual Map - Joystick'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GameManualMap()),
+                      );
+                    },
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 16)),
+                SizedBox(
+                  width: 200,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text('Manual Map - Tap'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                GameManualMap(shouldUseJoystick: false)),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               height: 10,
             ),
-            SizedBox(
-              width: 200,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text('Tiled Map'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GameTiledMap()),
-                  );
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text('Tiled Map - Joystick'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => GameTiledMap()),
+                      );
+                    },
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 16)),
+                SizedBox(
+                  width: 200,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text('Tiled Map - Tap'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                GameTiledMap(shouldUseJoystick: false)),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

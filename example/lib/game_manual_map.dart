@@ -13,39 +13,46 @@ import 'interface/knight_interface.dart';
 
 class GameManualMap extends StatelessWidget implements GameListener {
   final GameController _controller = GameController();
+  final bool shouldUseJoystick;
+
+  GameManualMap({this.shouldUseJoystick = true}) : super();
 
   @override
   Widget build(BuildContext context) {
+    Joystick joystick;
+    if (shouldUseJoystick) {
+      joystick = Joystick(
+        keyboardEnable: true,
+        directional: JoystickDirectional(
+          spriteBackgroundDirectional: Sprite('joystick_background.png'),
+          spriteKnobDirectional: Sprite('joystick_knob.png'),
+          size: 100,
+          isFixed: false,
+        ),
+        actions: [
+          JoystickAction(
+            actionId: 0,
+            sprite: Sprite('joystick_atack.png'),
+            align: JoystickActionAlign.BOTTOM_RIGHT,
+            size: 80,
+            margin: EdgeInsets.only(bottom: 50, right: 50),
+          ),
+          JoystickAction(
+            actionId: 1,
+            sprite: Sprite('joystick_atack_range.png'),
+            spriteBackgroundDirection: Sprite('joystick_background.png'),
+            enableDirection: true,
+            size: 50,
+            margin: EdgeInsets.only(bottom: 50, right: 160),
+          )
+        ],
+      );
+    }
     return LayoutBuilder(builder: (context, constraints) {
       DungeonMap.tileSize =
           max(constraints.maxHeight, constraints.maxWidth) / (kIsWeb ? 25 : 22);
       return BonfireWidget(
-        joystick: Joystick(
-          keyboardEnable: true,
-          directional: JoystickDirectional(
-            spriteBackgroundDirectional: Sprite('joystick_background.png'),
-            spriteKnobDirectional: Sprite('joystick_knob.png'),
-            size: 100,
-            isFixed: false,
-          ),
-          actions: [
-            JoystickAction(
-              actionId: 0,
-              sprite: Sprite('joystick_atack.png'),
-              align: JoystickActionAlign.BOTTOM_RIGHT,
-              size: 80,
-              margin: EdgeInsets.only(bottom: 50, right: 50),
-            ),
-            JoystickAction(
-              actionId: 1,
-              sprite: Sprite('joystick_atack_range.png'),
-              spriteBackgroundDirection: Sprite('joystick_background.png'),
-              enableDirection: true,
-              size: 50,
-              margin: EdgeInsets.only(bottom: 50, right: 160),
-            )
-          ],
-        ),
+        joystick: joystick,
         player: Knight(
           Position((4 * DungeonMap.tileSize), (6 * DungeonMap.tileSize)),
         ),
