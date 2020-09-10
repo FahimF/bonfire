@@ -225,8 +225,10 @@ class JoystickDirectional {
     }
   }
 
-  void directionalDown(int pointer, Offset localPosition) {
-    if (_backgroundRect == null) return;
+  bool directionalDown(int pointer, Offset localPosition) {
+    if (_backgroundRect == null) {
+      return false;
+    }
 
     _updateDirectionalRect(localPosition);
 
@@ -240,18 +242,22 @@ class JoystickDirectional {
       _dragging = true;
       _dragPosition = localPosition;
       _pointerDragging = pointer;
+      return true;
     }
+    return false;
   }
 
-  void directionalMove(int pointer, Offset localPosition) {
+  bool directionalMove(int pointer, Offset localPosition) {
     if (pointer == _pointerDragging) {
       if (_dragging) {
         _dragPosition = localPosition;
+        return true;
       }
     }
+    return false;
   }
 
-  void directionalUp(int pointer) {
+  bool directionalUp(int pointer) {
     if (pointer == _pointerDragging) {
       _dragging = false;
       _dragPosition = _backgroundRect.center;
@@ -260,7 +266,9 @@ class JoystickDirectional {
         intensity: 0.0,
         radAngle: 0.0,
       ));
+      return true;
     }
+    return false;
   }
 
   void _updateDirectionalRect(Offset position) {

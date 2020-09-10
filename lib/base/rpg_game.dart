@@ -160,6 +160,42 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     _updateTempList();
   }
 
+  @override
+  bool onPointerDown(PointerDownEvent event) {
+    // Was this event already handled by a component?
+    if (super.onPointerDown(event)) {
+      return true;
+    }
+    print('*** Tap down on game screen');
+  }
+
+  @override
+  bool onPointerMove(PointerMoveEvent event) {
+    // Was this event already handled by a component?
+    if (super.onPointerMove(event)) {
+      return true;
+    }
+    print('*** Pointer moved on game screen');
+  }
+
+  @override
+  bool onPointerUp(PointerUpEvent event) {
+    // Was this event already handled by a component?
+    if (super.onPointerUp(event)) {
+      return true;
+    }
+    print('*** Tap up on game screen');
+  }
+
+  @override
+  bool onPointerCancel(PointerCancelEvent event) {
+    // Was this event already handled by a component?
+    if (super.onPointerCancel(event)) {
+      return true;
+    }
+    print('*** Pointer cancel on game screen');
+  }
+
   void _updateTempList() {
     _visibleComponents = components.where((element) {
       return (element is GameComponent) && (element).isVisibleInCamera();

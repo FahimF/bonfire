@@ -32,6 +32,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
+  /// List of comoponents that handle tap and drag gestures - useful when detecting if a tap on a sub-class is on a component or on the main game screen itself
   Iterable<GameComponent> get _gesturesComponents => components
       .where((c) =>
           ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
@@ -42,31 +43,68 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   Iterable<PointerDetector> get _pointerDetectorComponents =>
       components.where((c) => (c is PointerDetector)).cast();
 
-  void onPointerCancel(PointerCancelEvent event) {
-    _pointerDetectorComponents.forEach((c) => c.onPointerCancel(event));
+  bool onPointerDown(PointerDownEvent event) {
+    // Is there a component at this position which will handle this action?
+    var handled = false;
+    _gesturesComponents.forEach((c) {
+      if (c.handlerPointerDown(event.pointer, event.localPosition)) {
+        handled = true;
+      }
+    });
+    _pointerDetectorComponents.forEach((c) {
+      if (c.onPointerDown(event)) {
+        handled = true;
+      }
+    });
+    return handled;
   }
 
-  void onPointerUp(PointerUpEvent event) {
-    _gesturesComponents.forEach(
-      (c) => c.handlerPointerUp(
+  bool onPointerMove(PointerMoveEvent event) {
+    // Is there a component at this position which will handle this action?
+    var handled = false;
+    _gesturesComponents
+        .where((element) => element is DragGesture)
+        .forEach((element) {
+      if (element.handlerPointerMove(event.pointer, event.localPosition)) {
+        handled = true;
+      }
+    });
+    _pointerDetectorComponents.forEach((c) {
+      if (c.onPointerMove(event)) {
+        handled = true;
+      }
+    });
+    return handled;
+  }
+
+  bool onPointerUp(PointerUpEvent event) {
+    // Is there a component at this position which will handle this action?
+    var handled = false;
+    _gesturesComponents.forEach((c) {
+      if (c.handlerPointerUp(
         event.pointer,
         event.localPosition,
-      ),
-    );
-    _pointerDetectorComponents.forEach((c) => c.onPointerUp(event));
+      )) {
+        handled = true;
+      }
+    });
+    _pointerDetectorComponents.forEach((c) {
+      if (c.onPointerUp(event)) {
+        handled = true;
+      }
+    });
+    return handled;
   }
 
-  void onPointerMove(PointerMoveEvent event) {
-    _gesturesComponents.where((element) => element is DragGesture).forEach(
-        (element) =>
-            element.handlerPointerMove(event.pointer, event.localPosition));
-    _pointerDetectorComponents.forEach((c) => c.onPointerMove(event));
-  }
-
-  void onPointerDown(PointerDownEvent event) {
-    _gesturesComponents.forEach(
-        (c) => c.handlerPointerDown(event.pointer, event.localPosition));
-    _pointerDetectorComponents.forEach((c) => c.onPointerDown(event));
+  bool onPointerCancel(PointerCancelEvent event) {
+    // Is there a component at this position which will handle this action?
+    var handled = false;
+    _pointerDetectorComponents.forEach((c) {
+      if (c.onPointerCancel(event)) {
+        handled = true;
+      }
+    });
+    return handled;
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.

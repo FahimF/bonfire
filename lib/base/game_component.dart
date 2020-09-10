@@ -14,32 +14,38 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   /// Variable used to control whether the component has been destroyed.
   bool _isDestroyed = false;
 
-  void handlerPointerDown(int pointer, Offset position) {
-    if (this.position == null || gameRef == null) return;
-
+  bool handlerPointerDown(int pointer, Offset position) {
+    if (this.position == null || gameRef == null) {
+      return false;
+    }
     if (this is TapGesture) {
-      (this as TapGesture).onTapDown(pointer, position);
+      return (this as TapGesture).onTapDown(pointer, position);
     }
     if (this is DragGesture) {
-      (this as DragGesture).startDrag(pointer, position);
+      return (this as DragGesture).startDrag(pointer, position);
     }
+    return false;
   }
 
-  void handlerPointerMove(int pointer, Offset position) {
+  bool handlerPointerMove(int pointer, Offset position) {
     if (this is DragGesture) {
-      (this as DragGesture).moveDrag(pointer, position);
+      return (this as DragGesture).moveDrag(pointer, position);
     }
+    return false;
   }
 
-  void handlerPointerUp(int pointer, Offset position) {
-    if (this.position == null) return;
+  bool handlerPointerUp(int pointer, Offset position) {
+    if (this.position == null) {
+      return false;
+    }
     if (this is TapGesture) {
-      (this as TapGesture).onTapUp(pointer, position);
+      return (this as TapGesture).onTapUp(pointer, position);
     }
 
     if (this is DragGesture) {
-      (this as DragGesture).endDrag(pointer);
+      return (this as DragGesture).endDrag(pointer);
     }
+    return false;
   }
 
   @override

@@ -52,33 +52,50 @@ class Joystick extends JoystickController {
     super.resize(size);
   }
 
-  void onPointerDown(PointerDownEvent event) {
-    if (directional != null)
-      directional.directionalDown(event.pointer, event.localPosition);
-    if (actions != null)
+  bool onPointerDown(PointerDownEvent event) {
+    var handled = false;
+    if (directional != null) {
+      handled = directional.directionalDown(event.pointer, event.localPosition);
+    }
+    if (actions != null) {
       actions.forEach(
           (action) => action.actionDown(event.pointer, event.localPosition));
+    }
+    return handled;
   }
 
-  void onPointerMove(PointerMoveEvent event) {
-    if (actions != null)
+  bool onPointerMove(PointerMoveEvent event) {
+    var handled = false;
+    if (actions != null) {
       actions.forEach(
           (action) => action.actionMove(event.pointer, event.localPosition));
-    if (directional != null)
-      directional.directionalMove(event.pointer, event.localPosition);
+    }
+    if (directional != null) {
+      handled = directional.directionalMove(event.pointer, event.localPosition);
+    }
+    return handled;
   }
 
-  void onPointerUp(PointerUpEvent event) {
-    if (actions != null)
+  bool onPointerUp(PointerUpEvent event) {
+    var handled = false;
+    if (actions != null) {
       actions.forEach((action) => action.actionUp(event.pointer));
-
-    if (directional != null) directional.directionalUp(event.pointer);
+    }
+    if (directional != null) {
+      handled = directional.directionalUp(event.pointer);
+    }
+    return handled;
   }
 
-  void onPointerCancel(PointerCancelEvent event) {
-    if (actions != null)
+  bool onPointerCancel(PointerCancelEvent event) {
+    var handled = false;
+    if (actions != null) {
       actions.forEach((action) => action.actionUp(event.pointer));
-    if (directional != null) directional.directionalUp(event.pointer);
+    }
+    if (directional != null) {
+      handled = directional.directionalUp(event.pointer);
+    }
+    return handled;
   }
 
   @override
